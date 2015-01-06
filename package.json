@@ -20,5 +20,10 @@
   "bugs": {
     "url": "https://github.com/MichaelXavier/karma-recording-server/issues"
   },
-  "homepage": "https://github.com/MichaelXavier/karma-recording-server"
+  "homepage": "https://github.com/MichaelXavier/karma-recording-server",
+  "dependencies": {
+    "karma": "^0.12.31",
+    "karma-express-http-server": "0.0.1",
+    "morgan": "^1.5.1"
+  }
 }

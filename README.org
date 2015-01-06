@@ -6,7 +6,51 @@
    2. Provides a karma plugin that will manage this server during the
       karma lifecycle.
    3. Gives an HTTP API for playing back the recorded requests.
+
+   It is actually just a specialization of the
+   `karma-express-http-server` plugin.
+** Usage
+   You may find this in your =karma.conf.js=:
+   #+begin_src javascript
+   module.exports = function(config) {
+     config.set({
+       frameworks: ['recording-server'],
+       // snip
+       plugins: [
+         // snip
+         'karma-recording-server'
+       ],
+       recordingServer: {
+         port: 4567
+       }
+     });
+   }
+   #+end_src
+** API
+   - DELETE /requests: Clear all recorded requests.
+   - DELETE /stubs: Clear all configured stubs
+   - POST /stubs: Post a stubbed response for use later, in the
+     following format. Note that path is compiled to a =RegExp=:
+     #+begin_src json
+     {
+       "method": "GET",
+       "path": "/foo/.*",
+       "body": "buzz off"
+     }
+     #+end_src
+
+   - GET /requests: Retrieve stubbed requests, in the following
+     format:
+     #+begin_src json
+     {
+       "method": "GET",
+       "path": "/foo/bar",
+       "requestHeaders": {"Accept": "application/json"},
+       "requestBody": "full body"
+     }
+     #+end_src
 ** A Word of Caution
    This is a private package for a very specific purpose. It is going
    to be tailored to my purposes. If you want to turn this into a
    proper package, fork it and be my guest.
+
