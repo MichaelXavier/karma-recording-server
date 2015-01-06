@@ -1,0 +1,12 @@
+* karma-recording-server
+** Overview
+   A testing tool for myself that does a few things:
+   1. Provides a tiny server that will accept all requests and record
+      details about them.
+   2. Provides a karma plugin that will manage this server during the
+      karma lifecycle.
+   3. Gives an HTTP API for playing back the recorded requests.
+** A Word of Caution
+   This is a private package for a very specific purpose. It is going
+   to be tailored to my purposes. If you want to turn this into a
+   proper package, fork it and be my guest.

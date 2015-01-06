@@ -1,0 +1,24 @@
+{
+  "name": "karma-recording-server",
+  "version": "0.0.1",
+  "description": "Simple little server that you can integrate with karma to record requests.",
+  "main": "index.js",
+  "private": true,
+  "scripts": {
+    "test": "echo \"YOLO\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:MichaelXavier/karma-recording-server.git"
+  },
+  "keywords": [
+    "karma-plugin",
+    "express"
+  ],
+  "author": "Michael Xavier <michael@michaelxavier.net>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/MichaelXavier/karma-recording-server/issues"
+  },
+  "homepage": "https://github.com/MichaelXavier/karma-recording-server"
+}
