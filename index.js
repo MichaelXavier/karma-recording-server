@@ -88,7 +88,7 @@ var createRecordingServer = function (args, config, logger, helper) {
     });
   }
 
-  ehhtp(args, config, logger, helper);
+  ehttp(args, config, logger, helper);
 };
 
 
