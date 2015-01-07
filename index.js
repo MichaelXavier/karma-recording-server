@@ -93,5 +93,5 @@ var createRecordingServer = function (args, config, logger, helper) {
 
 
 module.exports = {
-  'framework:recording-server': ['factory', createRecordingServer]
+  'framework:recording-server': ['factory', createRecordingServer],
 };
