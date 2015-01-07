@@ -1,13 +1,13 @@
 /// <reference path="../typings/jquery/jquery.d.ts"/>
 /// <reference path="../typings/urijs/URI.d.ts"/>
-interface RawRecordedRequest {
+export interface RawRecordedRequest {
   url: string;
   method: string;
   requestHeaders: Object;
   requestBody: string;
 }
 
-interface RecordedRequest {
+export interface RecordedRequest {
   path: string;
   queryParams: Object;
   method: string;
