@@ -88,7 +88,7 @@ export class RecorderClient {
     this.es = new EventSource(this.baseUrl + "/notifications");
     this.es.onmessage = (e) => {
       switch (e.data) {
-      case "recorded":
+      case '"recorded"':
         this.recordListeners.forEach((cb) => cb());
         break;
       }

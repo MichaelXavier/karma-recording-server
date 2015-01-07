@@ -57,7 +57,7 @@ var RecorderClient = (function () {
         this.es = new EventSource(this.baseUrl + "/notifications");
         this.es.onmessage = function (e) {
             switch (e.data) {
-                case "recorded":
+                case '"recorded"':
                     _this.recordListeners.forEach(function (cb) { return cb(); });
                     break;
             }
