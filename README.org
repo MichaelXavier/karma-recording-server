@@ -50,6 +50,25 @@
        "requestBody": "full body"
      }
      #+end_src
+
+   - GET /notifications: SSE api that sends string messages when
+     certain things happen:
+     #+begin_src javascript
+     var es = new EventSource('http://localhost:4567/notifications');
+     es.onmessage = function(event) {
+       switch (event.data) {
+         case "booted":
+           // ...
+           break;
+         case "recorded":
+           // ...
+           break;
+         case "stubbed":
+           // ...
+           break;
+       }
+     }
+     #+end_src
 ** A Word of Caution
    This is a private package for a very specific purpose. It is going
    to be tailored to my purposes. If you want to turn this into a

@@ -1,5 +1,6 @@
 var morgan = require('morgan');
 var ehttp = require('karma-express-http-server')['framework:express-http-server'][1];
+var SSE = require('express-sse');
 
 var createRecordingServer = function (args, config, logger, helper) {
   config.expressHttpServer = config.recordingServer;
@@ -8,6 +9,7 @@ var createRecordingServer = function (args, config, logger, helper) {
   config.expressHttpServer.appVisitor = function(app, log) {
     var requests = [];
     var stubs = [];
+    var sse = new SSE(['booted']);
 
     function parseRequest(req) {
       return {
@@ -76,11 +78,15 @@ var createRecordingServer = function (args, config, logger, helper) {
       res.end();
     });
 
+    app.get('/notifications', sse.init);
+
     app.all('*', function(req, res) {
       if (req.method !== 'OPTIONS') {
         requests.push(parseRequest(req));
+        sse.send('recorded');
         var resp = findStub(req);
         if (resp) {
+          sse.send('stubbed');
           res.send(resp);
         }
       }
