@@ -15,10 +15,31 @@ export interface RecordedRequest {
   requestBody: string;
 }
 
+interface ServerSentEvent<T> {
+  data: T;
+}
+
+declare class EventSource<T> {
+  constructor(url : string);
+  onmessage: (event : ServerSentEvent<T>) => void;
+}
+
 export class RecorderClient {
   private jQuery : JQueryStatic;
+  private es : EventSource<string>;
+  private recordListeners : Array<() => void>;
   constructor(private baseUrl : string) {
     this.jQuery = window['jQuery'];
+    this.recordListeners = [];
+    this.configureES();
+  }
+
+  onRecord(cb : () => void) : () => void {
+    this.recordListeners.push(cb);
+    return () => {
+      var i = this.recordListeners.indexOf(cb);
+      this.recordListeners.splice(i, 1);
+    }
   }
 
   reset() : JQueryPromise<Object> {
@@ -61,5 +82,16 @@ export class RecorderClient {
       url: this.baseUrl + path,
       data: data && JSON.stringify(data)
     });
+  }
+
+  private configureES() : void {
+    this.es = new EventSource(this.baseUrl + "/notifications");
+    this.es.onmessage = (e) => {
+      switch (e.data) {
+      case "recorded":
+        this.recordListeners.forEach((cb) => cb());
+        break;
+      }
+    }
   }
 }

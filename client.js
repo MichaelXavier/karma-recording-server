@@ -4,7 +4,17 @@ var RecorderClient = (function () {
     function RecorderClient(baseUrl) {
         this.baseUrl = baseUrl;
         this.jQuery = window['jQuery'];
+        this.recordListeners = [];
+        this.configureES();
     }
+    RecorderClient.prototype.onRecord = function (cb) {
+        var _this = this;
+        this.recordListeners.push(cb);
+        return function () {
+            var i = _this.recordListeners.indexOf(cb);
+            _this.recordListeners.splice(i, 1);
+        };
+    };
     RecorderClient.prototype.reset = function () {
         var p1 = this.makeRequest('DELETE', '/requests');
         var p2 = this.makeRequest('DELETE', '/stubs');
@@ -41,6 +51,17 @@ var RecorderClient = (function () {
             url: this.baseUrl + path,
             data: data && JSON.stringify(data)
         });
+    };
+    RecorderClient.prototype.configureES = function () {
+        var _this = this;
+        this.es = new EventSource(this.baseUrl + "/notifications");
+        this.es.onmessage = function (e) {
+            switch (e.data) {
+                case "recorded":
+                    _this.recordListeners.forEach(function (cb) { return cb(); });
+                    break;
+            }
+        };
     };
     return RecorderClient;
 })();
