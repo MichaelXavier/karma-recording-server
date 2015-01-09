@@ -15,6 +15,9 @@ var RecorderClient = (function () {
             _this.recordListeners.splice(i, 1);
         };
     };
+    RecorderClient.prototype.clearRecordListeners = function () {
+        this.recordListeners = [];
+    };
     RecorderClient.prototype.reset = function () {
         var p1 = this.makeRequest('DELETE', '/requests');
         var p2 = this.makeRequest('DELETE', '/stubs');
@@ -56,9 +59,10 @@ var RecorderClient = (function () {
         var _this = this;
         this.es = new EventSource(this.baseUrl + "/notifications");
         this.es.onmessage = function (e) {
-            switch (e.data) {
-                case '"recorded"':
-                    _this.recordListeners.forEach(function (cb) { return cb(); });
+            var evt = JSON.parse(e.data);
+            switch (evt.type) {
+                case 'recorded':
+                    _this.recordListeners.forEach(function (cb) { return cb(evt.data); });
                     break;
             }
         };

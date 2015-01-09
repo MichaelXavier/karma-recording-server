@@ -15,31 +15,40 @@ export interface RecordedRequest {
   requestBody: string;
 }
 
-interface ServerSentEvent<T> {
+interface ServerSentEvent {
+  data: string;
+}
+
+interface RecorderEvent<T> {
+  type: string;
   data: T;
 }
 
 declare class EventSource<T> {
   constructor(url : string);
-  onmessage: (event : ServerSentEvent<T>) => void;
+  onmessage: (event : ServerSentEvent) => void;
 }
 
 export class RecorderClient {
   private jQuery : JQueryStatic;
-  private es : EventSource<string>;
-  private recordListeners : Array<() => void>;
+  private es : EventSource<RecorderEvent<any>>;
+  private recordListeners : Array<(req : RecordedRequest) => void>;
   constructor(private baseUrl : string) {
     this.jQuery = window['jQuery'];
     this.recordListeners = [];
     this.configureES();
   }
 
-  onRecord(cb : () => void) : () => void {
+  onRecord(cb : (req  : RecordedRequest) => void) : () => void {
     this.recordListeners.push(cb);
     return () => {
       var i = this.recordListeners.indexOf(cb);
       this.recordListeners.splice(i, 1);
     }
+  }
+
+  clearRecordListeners() : void {
+    this.recordListeners = [];
   }
 
   reset() : JQueryPromise<Object> {
@@ -87,9 +96,10 @@ export class RecorderClient {
   private configureES() : void {
     this.es = new EventSource(this.baseUrl + "/notifications");
     this.es.onmessage = (e) => {
-      switch (e.data) {
-      case '"recorded"':
-        this.recordListeners.forEach((cb) => cb());
+      var evt : RecorderEvent<any> = JSON.parse(e.data);
+      switch (evt.type) {
+      case 'recorded':
+        this.recordListeners.forEach((cb) => cb(evt.data));
         break;
       }
     }

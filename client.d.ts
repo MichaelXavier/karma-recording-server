@@ -19,7 +19,8 @@ export declare class RecorderClient {
     private es;
     private recordListeners;
     constructor(baseUrl: string);
-    onRecord(cb: () => void): () => void;
+    onRecord(cb: (req: RecordedRequest) => void): () => void;
+    clearRecordListeners(): void;
     reset(): JQueryPromise<Object>;
     getRequests(): JQueryPromise<RecordedRequest[]>;
     stubResponse(method: string, path: string, body: string): JQueryPromise<Object>;

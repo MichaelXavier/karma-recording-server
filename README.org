@@ -56,8 +56,10 @@
      #+begin_src javascript
      var es = new EventSource('http://localhost:4567/notifications');
      es.onmessage = function(event) {
-       switch (event.data) {
+       var e = JSON.parse(event.data);
+       switch (e.type) {
          case "booted":
+           // e.data is the recording
            // ...
            break;
          case "recorded":

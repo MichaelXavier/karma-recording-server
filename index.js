@@ -9,7 +9,7 @@ var createRecordingServer = function (args, config, logger, helper) {
   config.expressHttpServer.appVisitor = function(app, log) {
     var requests = [];
     var stubs = [];
-    var sse = new SSE(['booted']);
+    var sse = new SSE([{type: 'booted'}]);
 
     function parseRequest(req) {
       return {
@@ -82,11 +82,12 @@ var createRecordingServer = function (args, config, logger, helper) {
 
     app.all('*', function(req, res) {
       if (req.method !== 'OPTIONS') {
-        requests.push(parseRequest(req));
-        sse.send('recorded');
+        var parsed = parseRequest(req);
+        requests.push(parsed);
+        sse.send({type: 'recorded', data: parsed});
         var resp = findStub(req);
         if (resp) {
-          sse.send('stubbed');
+          sse.send({type: 'stubbed'});
           res.send(resp);
         }
       }
