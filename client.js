@@ -1,5 +1,3 @@
-/// <reference path="../typings/jquery/jquery.d.ts"/>
-/// <reference path="../typings/urijs/URI.d.ts"/>
 var RecorderClient = (function () {
     function RecorderClient(baseUrl) {
         this.baseUrl = baseUrl;
@@ -69,4 +67,3 @@ var RecorderClient = (function () {
     };
     return RecorderClient;
 })();
-exports.RecorderClient = RecorderClient;

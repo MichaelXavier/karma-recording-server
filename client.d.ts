@@ -1,21 +1,32 @@
 /// <reference path="typings/jquery/jquery.d.ts" />
 /// <reference path="typings/urijs/URI.d.ts" />
-export interface RawRecordedRequest {
+interface RawRecordedRequest {
     url: string;
     method: string;
     requestHeaders: Object;
     requestBody: string;
 }
-export interface RecordedRequest {
+interface RecordedRequest {
     path: string;
     queryParams: Object;
     method: string;
     requestHeaders: Object;
     requestBody: string;
 }
-export declare class RecorderClient {
+interface ServerSentEvent {
+    data: string;
+}
+interface RecorderEvent<T> {
+    type: string;
+    data: T;
+}
+declare class EventSource<T> {
+    constructor(url: string);
+    onmessage: (event: ServerSentEvent) => void;
+}
+declare class RecorderClient {
     private baseUrl;
-    private jQuery;
+    jQuery: JQueryStatic;
     private es;
     private recordListeners;
     constructor(baseUrl: string);
