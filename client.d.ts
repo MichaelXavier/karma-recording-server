@@ -20,6 +20,12 @@ interface RecorderEvent<T> {
     type: string;
     data: T;
 }
+interface Stub {
+    method: string;
+    path: string;
+    body: string;
+    headers?: Object;
+}
 declare class EventSource<T> {
     constructor(url: string);
     onmessage: (event: ServerSentEvent) => void;
@@ -34,7 +40,7 @@ declare class RecorderClient {
     clearRecordListeners(): void;
     reset(): JQueryPromise<Object>;
     getRequests(): JQueryPromise<RecordedRequest[]>;
-    stubResponse(method: string, path: string, body: string): JQueryPromise<Object>;
+    stubResponse(method: string, path: string, body: string, headers?: Object): JQueryPromise<Object>;
     private makeRequest<T>(method, path, data?);
     private configureES();
 }

@@ -24,6 +24,16 @@ interface RecorderEvent<T> {
   data: T;
 }
 
+interface Stub {
+  // A stub is matched if the method and path are matched
+  method: string;
+  path: string;
+  // This gets returned in the body of the response
+  body: string;
+  // This optionally sets headers that the response should add
+  headers?: Object;
+}
+
 declare class EventSource<T> {
   constructor(url : string);
   onmessage: (event : ServerSentEvent) => void;
@@ -77,12 +87,18 @@ class RecorderClient {
     return d.promise();
   }
 
-  stubResponse(method : string, path : string, body : string) : JQueryPromise<Object> {
-    return this.makeRequest('POST', '/stubs', {
+  stubResponse(method : string, path : string, body : string, headers? : Object) : JQueryPromise<Object> {
+    var stub : Stub = {
       method: method,
       path: path,
       body: body
-    })
+    };
+
+    if (headers) {
+      stub.headers = headers;
+    }
+
+    return this.makeRequest('POST', '/stubs', stub)
   }
 
   private makeRequest<T>(method : string, path: string, data : Object = null) : JQueryPromise<T> {

@@ -1,6 +1,6 @@
 {
   "name": "karma-recording-server",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Simple little server that you can integrate with karma to record requests.",
   "main": "index.js",
   "private": true,

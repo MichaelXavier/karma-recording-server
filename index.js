@@ -25,7 +25,7 @@ var createRecordingServer = function (args, config, logger, helper) {
         var stub = stubs[i];
         if (req.method == stub.method &&
             req.path.match(stub.path)) {
-          return stub.body;
+          return stub;
         }
       }
       return undefined;
@@ -85,10 +85,15 @@ var createRecordingServer = function (args, config, logger, helper) {
         var parsed = parseRequest(req);
         requests.push(parsed);
         sse.send({type: 'recorded', data: parsed});
-        var resp = findStub(req);
-        if (resp) {
+        var stub = findStub(req);
+        if (stub) {
+          if (stub.headers) {
+            Object.keys(stub.headers).forEach(function(k) {
+              res.set(k, stub.headers[k]);
+            })
+          }
           sse.send({type: 'stubbed'});
-          res.send(resp);
+          res.send(stub.body);
         }
       }
       res.end();

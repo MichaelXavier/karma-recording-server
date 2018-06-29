@@ -1,3 +1,5 @@
+/// <reference path="../typings/jquery/jquery.d.ts"/>
+/// <reference path="../typings/urijs/URI.d.ts"/>
 var RecorderClient = (function () {
     function RecorderClient(baseUrl) {
         this.baseUrl = baseUrl;
@@ -38,12 +40,16 @@ var RecorderClient = (function () {
         });
         return d.promise();
     };
-    RecorderClient.prototype.stubResponse = function (method, path, body) {
-        return this.makeRequest('POST', '/stubs', {
+    RecorderClient.prototype.stubResponse = function (method, path, body, headers) {
+        var stub = {
             method: method,
             path: path,
             body: body
-        });
+        };
+        if (headers) {
+            stub.headers = headers;
+        }
+        return this.makeRequest('POST', '/stubs', stub);
     };
     RecorderClient.prototype.makeRequest = function (method, path, data) {
         if (data === void 0) { data = null; }
