@@ -67,7 +67,7 @@ var createRecordingServer = function (args, config, logger, helper) {
     });
 
     app.get('/requests', function(req, res) {
-      res.set('Content-Type', 'application/json');
+      res.header('Content-Type', 'application/json');
       res.json(requests);
     });
 
@@ -88,11 +88,13 @@ var createRecordingServer = function (args, config, logger, helper) {
         var stub = findStub(req);
         if (stub) {
           if (stub.headers) {
-            Object.keys(stub.headers).forEach(function(k) {
-              res.set(k, stub.headers[k]);
-            })
+            res.header(stub.headers);
           }
           sse.send({type: 'stubbed'});
+
+          // Expose via CORS all headers we're sending
+          res.header("Access-Control-Expose-Headers", Object.keys(res.getHeaders()).join(', '));
+
           res.send(stub.body);
         }
       }
