@@ -90,6 +90,7 @@ var createRecordingServer = function (args, config, logger, helper) {
           if (stub.headers) {
             res.header(stub.headers);
           }
+          res.status(stub.status || 200);
           sse.send({type: 'stubbed'});
 
           // Expose via CORS all headers we're sending

@@ -32,6 +32,7 @@ interface Stub {
   body: string;
   // This optionally sets headers that the response should add
   headers?: Object;
+  status?: number;
 }
 
 declare class EventSource<T> {
@@ -87,17 +88,7 @@ class RecorderClient {
     return d.promise();
   }
 
-  stubResponse(method : string, path : string, body : string, headers? : Object) : JQueryPromise<Object> {
-    var stub : Stub = {
-      method: method,
-      path: path,
-      body: body
-    };
-
-    if (headers) {
-      stub.headers = headers;
-    }
-
+  stubResponse(stub : Stub) : JQueryPromise<Object> {
     return this.makeRequest('POST', '/stubs', stub)
   }
 

@@ -36,9 +36,13 @@
      {
        "method": "GET",
        "path": "/foo/.*",
-       "body": "buzz off"
+       "body": "buzz off",
+       "headers": {"Content-Type": "application/json"},
+       "status": 401
      }
      #+end_src
+
+     Both =headers= and =status= are optional.
 
    - GET /requests: Retrieve stubbed requests, in the following
      format:

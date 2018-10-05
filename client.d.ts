@@ -25,6 +25,7 @@ interface Stub {
     path: string;
     body: string;
     headers?: Object;
+    status?: number;
 }
 declare class EventSource<T> {
     constructor(url: string);
@@ -40,7 +41,7 @@ declare class RecorderClient {
     clearRecordListeners(): void;
     reset(): JQueryPromise<Object>;
     getRequests(): JQueryPromise<RecordedRequest[]>;
-    stubResponse(method: string, path: string, body: string, headers?: Object): JQueryPromise<Object>;
+    stubResponse(stub: Stub): JQueryPromise<Object>;
     private makeRequest<T>(method, path, data?);
     private configureES();
 }

@@ -40,15 +40,7 @@ var RecorderClient = (function () {
         });
         return d.promise();
     };
-    RecorderClient.prototype.stubResponse = function (method, path, body, headers) {
-        var stub = {
-            method: method,
-            path: path,
-            body: body
-        };
-        if (headers) {
-            stub.headers = headers;
-        }
+    RecorderClient.prototype.stubResponse = function (stub) {
         return this.makeRequest('POST', '/stubs', stub);
     };
     RecorderClient.prototype.makeRequest = function (method, path, data) {
