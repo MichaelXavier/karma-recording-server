@@ -49,9 +49,12 @@ var createRecordingServer = function (args, config, logger, helper) {
 
     // kick rocks, CORS
     app.use(function(req, res, next) {
-      res.header("Access-Control-Allow-Origin", "*");
+      var reqOrigin = req.get("Origin");
+      res.header("Access-Control-Allow-Origin", reqOrigin || "*");
+      res.header("Access-Control-Allow-Credentials", "true");
       res.header("Access-Control-Allow-Methods", "GET,POST,DELETE");
       res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+      res.header("Vary", "Origin");
       next();
     });
 
